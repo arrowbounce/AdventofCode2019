@@ -5,3 +5,4 @@ i = 0
 while i < len(cells):
 	print cells[i:i+4]
 	i+=4
+#initial attempt at trying to figure out pattern, by seeing individual commands.
