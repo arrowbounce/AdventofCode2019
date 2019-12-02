@@ -1,7 +1,8 @@
+#saved seperately from Day 2 because part 2 of day 2 suggests I'll need this later.
 f = open("day2", "r")
 cells = f.read().split(',')
 cells = [int(i) for i in cells]
-i = 0
+i = 0 
 while True:
 	value = cells[i]
 	if value == 1:

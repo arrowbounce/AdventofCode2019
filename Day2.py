@@ -2,7 +2,8 @@ f = open("day2", "r")
 cells = f.read().split(',')
 cells = [int(i) for i in cells]
 i = 0
-cells[1] = 31
+#Comment out below for part 1 solution
+cells[1] = 31	#Tested various values from 0-2 for noun and verb, and used Excel once pattern was found.
 cells[2] = 46
 while True:
 
