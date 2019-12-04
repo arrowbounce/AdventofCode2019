@@ -1,6 +1,6 @@
 def legal(i):
     for x in range(0, 10):
-        if str(i).count(str(x)) == 2:
+        if str(i).count(str(x)) == 2: #change to >= for part 1
             prev = 0
             for x in str(i):
                 if x < prev:
