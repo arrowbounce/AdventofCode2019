@@ -9,7 +9,7 @@ class intcode:
     oplen = {1: 3,2: 3,3: 1,4: 1,5: 2,6: 2,7: 3,8: 3,99: 0}
     outs = [1, 2, 3, 7, 8]
     def __init__(self, cells):
-        self.cells = cells
+        self.cells = cells[:]
         self.inputs = []
         self.lastpos = 0
     def interp(self, num):
@@ -87,4 +87,4 @@ class intcode:
                 print value[0]
                 print "Error"
                 break
-        return (outputs, value[0])
+        return [outputs, value[0]]
