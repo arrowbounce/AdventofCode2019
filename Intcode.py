@@ -1,10 +1,17 @@
-#version2.0. Day 5.
+#version 3.0. Day 7.
+
+#Usage:
+#Initialize with intcode(cells), where cells is a list representing the intcode memory
+#Add inputs using addinputs(inputs), where inputs is a list of inputs to add
+#Run the the machien with run(). Machine will stop on either an input command without an input or a halt command.
 
 class intcode:
     oplen = {1: 3,2: 3,3: 1,4: 1,5: 2,6: 2,7: 3,8: 3,99: 0}
     outs = [1, 2, 3, 7, 8]
     def __init__(self, cells):
         self.cells = cells
+        self.inputs = []
+        self.lastpos = 0
     def interp(self, num):
         out = []
         code = num%100
@@ -30,51 +37,54 @@ class intcode:
             else:
                 out.append(self.cells[start+i])
         return out
-    def run(self, inputs):
+    def addinputs(self, inputs):
+        self.inputs.extend(inputs)
+    def run(self):
         outputs = []
-        i = 0
         while True:
-            value = self.cells[i]
+            value = self.cells[self.lastpos]
             value = self.interp(value)
-            args = self.getargs(i, value)
+            args = self.getargs(self.lastpos, value)
             if value[0] == 1:
                 self.cells[args[3]] = args[1] + args[2]
-                i+= 4
+                self.lastpos+= 4
             elif value[0] == 2:
                 self.cells[args[3]] = args[1] * args[2]
-                i+=4
+                self.lastpos+=4
             elif value[0] == 3:
-                self.cells[args[1]] = inputs.pop(0)
-                i+=2
+                if len(self.inputs) == 0:
+                    break
+                self.cells[args[1]] = self.inputs.pop(0)
+                self.lastpos+=2
             elif value[0] == 4:
                 outputs.append(args[1])
-                i+=2
+                self.lastpos+=2
             elif value[0] == 5:
                 if args[1] != 0:
-                    i = args[2]
+                    self.lastpos = args[2]
                 else:
-                    i+= 3
+                    self.lastpos+= 3
             elif value[0] == 6:
                 if args[1] == 0:
-                    i = args[2]
+                    self.lastpos = args[2]
                 else:
-                    i+= 3
+                    self.lastpos+= 3
             elif value[0] == 7:
                 if args[1] < args[2]:
                     self.cells[args[3]] = 1
                 else:
                     self.cells[args[3]] = 0
-                i+= 4
+                self.lastpos+= 4
             elif value[0] == 8:
                 if args[1] == args[2]:
                     self.cells[args[3]] = 1
                 else:
                     self.cells[args[3]] = 0
-                i+= 4
+                self.lastpos+= 4
             elif value[0] == 99:
                 break
             else:
                 print value[0]
                 print "Error"
                 break
-        return outputs
+        return (outputs, value[0])
